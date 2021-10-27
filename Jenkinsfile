@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'ubuntu'
+        }
+    }
     
     parameters {   // Dando de alta un parametro que se solicitará al ejecutar un proyecto
       string defaultValue: '0', name: 'CODIGO_SALIDA'
@@ -8,18 +12,21 @@ pipeline {
         
     stages{
         stage('Etapa 0'){
-            when {
-               expression {
-                   this.params.CODIGO_SALIDA == null
-               } 
-            }
             steps {
                 echo 'Dentro de la Etapa 0'
+                // Previamente habriamos añado un trigger de forma que si hay un cambio en el repo, se ejecute autom el job
+                // ESTA ES MUY CUTRE... ESTA NO LA QUEREMOS. Si es la primera ejecución, solo dar de alta parametros
+                // Comprobar si ha habido un cambio en el fichero Jenkinsfile del repo
+                // Se corte la ejecución del JOB
             }
         }
         stage('Etapa 1'){
             steps {
                 echo 'Dentro de la Etapa 1'
+                sh 'hostname'
+                sh 'pwd'
+                sh 'ls -l'
+                sh 'ls -l /'
             }
             post {
                 success {
