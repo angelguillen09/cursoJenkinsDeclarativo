@@ -1,7 +1,22 @@
 pipeline {
     agent any
     
+    parameters {   // Dando de alta un parametro que se solicitará al ejecutar un proyecto
+      string defaultValue: '0', name: 'CODIGO_SALIDA'
+    }
+    
+        
     stages{
+        stage('Etapa 0'){
+            when {
+               expression {
+                   this.params.CODIGO_SALIDA == null
+               } 
+            }
+            steps {
+                echo 'Dentro de la Etapa 0'
+            }
+        }
         stage('Etapa 1'){
             steps {
                 echo 'Dentro de la Etapa 1'
@@ -25,7 +40,7 @@ pipeline {
                         catchError(buildResult: 'SUCCESS', message: 'Aqui la cagamos !!!!!', stageResult: 'FAILURE') {
                             echo 'Dentro de la Etapa 2.2'
                             echo 'Esta etapa genera una explosión gigantescamente aberrante !!!! ;)'
-                            sh 'exit 1'
+                            sh "exit ${CODIGO_SALIDA}"
                         }
                     }
                     post {
