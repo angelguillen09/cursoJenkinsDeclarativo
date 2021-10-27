@@ -90,7 +90,7 @@ pipeline {
                 stages {
                     stage('Probar el sistema') {
                         steps {
-                            echo 'Voy a probar mi app sobre ${SISTEMA_OPERATIVO} corriendo en ${PROGRAMA}'
+                            echo "Voy a probar mi app sobre ${SISTEMA_OPERATIVO} corriendo en ${PROGRAMA}"
                         }
                     }
                 }
