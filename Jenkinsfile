@@ -22,9 +22,12 @@ pipeline {
                 }
                 stage('Etapa 2.2') {
                     steps {
-                        echo 'Dentro de la Etapa 2.2'
-                        echo 'Esta etapa genera una explosión gigantescamente aberrante !!!! ;)'
-                        sh 'exit 1'
+                        catchError(buildResult: 'SUCCESS', message: 'aquí la hemos cagado!!', stageResult: 'FAILURE') {
+                            echo 'Dentro de la Etapa 2.2'
+                            echo 'Esta etapa genera una explosión gigantescamente aberrante !!!! ;)'
+                            sh 'exit 1'
+                        }
+                       
                     }
                     post {
                         success {
