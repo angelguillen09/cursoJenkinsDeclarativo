@@ -33,13 +33,29 @@ node {
         echo 'Estoy en la etapa 3'   
         parallel (
             "Subetapa 3.1": {
-                echo 'Estoy en la etapa 3.1'   
-                sh 'sleep 10'
+                stage('Etapa 3.1'){
+                    echo 'Estoy en la etapa 3.1'   
+                    sh 'sleep 10'
+                }
             },
             "Subetapa 3.2": {
-                echo 'Estoy en la etapa 3.2'   
-                sh 'sleep 10'
+                stage('Etapa 3.2'){
+                    echo 'Estoy en la etapa 3.2'   
+                    sh 'sleep 10'
+                }
             }
         )
     }
+
+    stage('Etapa 4'){
+        so = ['Linux','Macos','BSD']
+        programas = ['nginx','apache']
+        
+        for (int i=0;i<so.size();i++){
+            for (int j=0;j<programas.size();j++){
+                echo "Voy a probar mi app sobre ${so[i]} corriendo en ${programas[j]}"
+            }
+        }
+    }
+    
 }
