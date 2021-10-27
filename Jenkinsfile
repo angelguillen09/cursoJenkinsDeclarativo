@@ -1,81 +1,41 @@
-// Puedo definir un parametro, donde me de la gana del fichero !!!!
-// EUREKA !!!!
-properties (
-    [
-        parameters(
-                [
-                    string(defaultValue: '1', name: 'CODIGO_SALIDA')
-                ]
-            ),
-        pipelineTriggers(
-                [
-                    cron("* * * * *")
-                ]
-            )
-    ]    
-)
+VERSION_DEL_PIPELINE="1"
+
+if (this.params.getOrDefault('VERSION_DEL_PIPELINE',"-1")!=VERSION_DEL_PIPELINE){
+    creoConfiguracion()
+    return
+}
 
 node {
-    stage('Etapa 0'){
-        echo 'Dentro de la Etapa 0'
+    stage ("Etapa 1") {
+        echo "Hago mis cosas"
     }
-    try{
-        stage('Etapa 1'){
-            try{
-                echo 'Dentro de la Etapa 1'
-                if (this.params.CODIGO_SALIDA != "0") {
-                    sh 'exit 1'
-                }
-                // Esta tarea se ejecura siempre que las anteriores hayan ido bien
-                echo 'Despues de la Etapa 1, si va bien'
-            }catch (exc){
-                // Este sería el caso del catchError
-                echo 'Esto solo se va a ejecutar si se ha producido un error'   
-                // Este seria el caso failure del Declarativo
-                throw exc
-            }finally {
-                echo 'Esto se ejecuta si hay error o no'   
-            }
-            echo 'Luego vendrían más tareas después.'
-        }
-    } catch (exc) {
-        echo 'Esto se ejecutaría si en algun sitio de etapa 1 ha habido un error'
-    } finally {
-        echo 'Esto se ejecutaría independientemente de si la etapa 1 ha ido bien o no.'
+    stage ("Etapa 2") {
+        echo "Hago más de mis cosas"
     }
-    stage('Etapa 2'){
-        echo 'Estoy en la etapa 2'   
-    }
-    stage('Etapa 3'){
-        echo 'Estoy en la etapa 3'   
-        parallel (
-            "Subetapa 3.1": {
-                stage('Etapa 3.1'){
-                    echo 'Estoy en la etapa 3.1'   
-                    sh 'sleep 10'
-                }
-            },
-            "Subetapa 3.2": {
-                stage('Etapa 3.2'){
-                    echo 'Estoy en la etapa 3.2'   
-                    sh 'sleep 10'
-                }
-            }
-        )
-    }
-
-    stage('Etapa 4'){
-        so = ['Linux','Macos','BSD']
-        programas = ['nginx','apache']
-        
-        for (int i=0;i<so.size();i++){
-            for (int j=0;j<programas.size();j++){
-                if (so[i]=='Linux' && programas[j]=='apache'){
-                    continue
-                }
-                echo "Voy a probar mi app sobre ${so[i]} corriendo en ${programas[j]}"
-            }
-        }
-    }
-    
 }
+
+def creoConfiguracion(){
+    properties(
+        [
+            parameters(
+                [
+                    choice(name: 'VERSION_DEL_PIPELINE', descripcion='Version del pipeline instalada', choices: [ VERSION_DEL_PIPELINE ])
+                    // Aqui pongo el resto de params que necesite mi pipeline
+                ]
+            )
+        ]
+    )
+}
+
+
+dia 0 que ejecutase esto... cuanto valdria el param?
+    Nada no existe    En este escenario... quiero crear los params ? SI... y hacer algo más? NO
+Segunda ejecucion: 
+    1                  En este escenario. quiero crear parametros?  Pa' que... ya están
+Cargo una nueva version... donde hay otros parametros... o triggers, o cmabia valores por defecto de params
+    Nueva version va a ser la 2 del parametro VERSION_DEL_PIPELINE
+    La ejecuto...
+    Cuanto vale version instalada... el parametro? 1
+    Es igual que la que viene en mi script? NO... en este escenario tambien cargo y me piro
+Siguiente que ejecuto
+    Viene 2.. hago algo? las tareas.
