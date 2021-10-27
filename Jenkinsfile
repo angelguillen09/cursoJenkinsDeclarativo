@@ -8,7 +8,7 @@ pipeline {
             }
             post {
                 success {
-                    echo 'Despues de la Etapa 3, si va bien'
+                    echo 'Despues de la Etapa 1, si va bien'
                 }
             }
         }
@@ -22,12 +22,11 @@ pipeline {
                 }
                 stage('Etapa 2.2') {
                     steps {
-                        catchError(buildResult: 'SUCCESS', message: 'aquí la hemos cagado!!', stageResult: 'FAILURE') {
+                        catchError(buildResult: 'SUCCESS', message: 'Aqui la cagamos !!!!!', stageResult: 'FAILURE') {
                             echo 'Dentro de la Etapa 2.2'
                             echo 'Esta etapa genera una explosión gigantescamente aberrante !!!! ;)'
                             sh 'exit 1'
                         }
-                       
                     }
                     post {
                         success {
@@ -51,8 +50,17 @@ pipeline {
             //post {}
         }
         stage('Etapa 3'){
-            steps {
-                echo 'Dentro de la Etapa 3'
+            parallel {
+                stage('Etapa 3.1'){
+                    steps {
+                        sh 'sleep 10'
+                    }
+                }
+                stage('Etapa 3.2'){
+                    steps {
+                        sh 'sleep 10'
+                    }
+                }
             }
         }
     }
