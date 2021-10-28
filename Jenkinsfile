@@ -54,11 +54,11 @@ node {
             echo 'Restauro el Tomcat'
         }
     }
-    }
     finally {
         stage ("Limpieza del workspace") {
             sh 'mvn clean'
         }
+    }
     }
 }
 
