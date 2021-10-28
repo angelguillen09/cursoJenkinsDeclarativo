@@ -28,14 +28,35 @@ if (this.params.getOrDefault('VERSION_DEL_PIPELINE',"-1")!=VERSION_DEL_PIPELINE)
 // Aquí empiezan las tareas propias de mi pipeline
 node {
     try{
-        stage ("Etapa 1") {
-            echo "Hago mis cosas"
+        checkout scm
+        //checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'MiCredencialGitHub', url: 'https://github.com/IvanciniGT/cursoJenkinsWebapp.git']]])
+        stage('Compilación') {
+            sh 'mvn compile'
+        }
+        stage('Pruebas') {
+            try{
+                sh 'mvn test'
+            }
+            finally{
+                echo 'Publico los resultados de los test'
+                junit 'target/surefire-reports/*.xml'
+            }
+        }
+        stage('Empaquetado') {
+            sh 'mvn package'
+            echo 'Guardo el fichero WAR'
+            archiveArtifacts artifacts: 'target/webapp.war', followSymlinks: false
+        }
+        stage('Despliegue') {
+            echo 'Despliego el fichero WAR'
+            echo 'Lo pruebo, el despliegue'
+            echo 'Restauro el Tomcat'
         }
     }
     finally {
-        //stage ("Limpieza del workspace") {
-        //    cleanWs()
-        //}
+        stage ("Limpieza del workspace") {
+            sh 'mvn clean'
+        }
     }
 }
 
