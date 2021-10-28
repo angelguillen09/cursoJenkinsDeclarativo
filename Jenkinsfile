@@ -19,7 +19,7 @@ def creoConfiguracion(){
         [
             parameters(
                 [
-                    choice(name: 'VERSION_DEL_PIPELINE', descripcion='Version del pipeline instalada', choices: [ VERSION_DEL_PIPELINE ])
+                    choice(name: 'VERSION_DEL_PIPELINE', description: 'Version del pipeline instalada', choices: [ VERSION_DEL_PIPELINE ])
                     // Aqui pongo el resto de params que necesite mi pipeline
                 ]
             )
