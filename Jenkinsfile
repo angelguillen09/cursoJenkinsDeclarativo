@@ -27,8 +27,9 @@ if (this.params.getOrDefault('VERSION_DEL_PIPELINE',"-1")!=VERSION_DEL_PIPELINE)
 }
 // Aquí empiezan las tareas propias de mi pipeline
 node {
+    checkout scm
+    docker.image('maven:3.8.3-openjdk-8').inside {
     try{
-        checkout scm
         //checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'MiCredencialGitHub', url: 'https://github.com/IvanciniGT/cursoJenkinsWebapp.git']]])
         stage('Compilación') {
             sh 'mvn compile'
@@ -52,6 +53,7 @@ node {
             echo 'Lo pruebo, el despliegue'
             echo 'Restauro el Tomcat'
         }
+    }
     }
     finally {
         stage ("Limpieza del workspace") {
